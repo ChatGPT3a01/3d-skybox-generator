@@ -1,58 +1,135 @@
+<div align="center">
+
 # 🌐 亮言~3D環景球生成器
 
-一個簡單易用的工具，讓您輕鬆將 360° 全景圖轉換成 VR 環境支援的 GLB 格式環景球。
+### 輕鬆將 360° 全景圖轉換成 VR 環境支援的 GLB 格式環景球
+
+[![GitHub Pages](https://img.shields.io/badge/線上使用-GitHub%20Pages-blue?style=for-the-badge&logo=github)](https://chatgpt3a01.github.io/3d-skybox-generator/)
+[![License](https://img.shields.io/badge/授權-課程學員專用-red?style=for-the-badge)](LICENSE)
+[![Version](https://img.shields.io/badge/版本-v1.0-brightgreen?style=for-the-badge)](https://github.com/ChatGPT3a01/3d-skybox-generator)
 
 ![專案 Logo](logo.png)
 
----
+<br>
 
-## 🚀 快速開始
+## 🚀 免安裝｜立即使用
 
-### 雲端版本（推薦）⭐
+<table>
+<tr>
+<td>
 
-**無需安裝，點擊即用！**
+### ☁️ 雲端版本（推薦）
 
-👉 **[立即使用雲端版本](https://chatgpt3a01.github.io/3d-skybox-generator/)**
+</td>
+</tr>
+<tr>
+<td>
 
-- ✅ 無需安裝 Python
-- ✅ 無需下載檔案
-- ✅ 任何裝置都能使用
-- ✅ 開啟網頁即可使用
+# 🎯 [點擊這裡開始使用](https://chatgpt3a01.github.io/3d-skybox-generator/)
 
-### 本地端版本
+**無需安裝任何軟體｜開啟瀏覽器即可使用**
 
-如果您偏好本地端執行，或需要離線使用，請參考下方的[安裝步驟](#-安裝步驟)。
+</td>
+</tr>
+</table>
+
+<br>
+
+> ✅ 支援任何裝置（電腦、平板、手機）
+> ✅ 無需安裝 Python 或下載檔案
+> ✅ 即開即用，快速便捷
+
+<br>
+
+📦 **偏好本地端？** 請往下查看[本地端安裝步驟](#-安裝步驟本地端版本)
+
+</div>
 
 ---
 
 ## ✨ 功能特點
 
-- 🖼️ **簡單上傳** - 支援拖曳或點擊上傳 360° 全景圖（JPG、PNG）
-- 🔄 **一鍵生成** - 自動整合環景球模板，快速生成 GLB 檔案
-- 👁️ **即時預覽** - 上傳後立即預覽圖片效果
-- 💾 **自動下載** - 生成完成自動下載 skybox.glb 檔案
-- ☁️ **雲端 + 本地** - 提供雲端版本（免安裝）和本地端版本（離線使用）
-- 🎨 **精美介面** - 啟動畫面 + 漸層紫藍配色 + 流暢動畫
+<table>
+<tr>
+<td width="33%" align="center">
+
+### 🖼️ 簡單上傳
+拖曳或點擊上傳<br>360° 全景圖<br>(JPG、PNG)
+
+</td>
+<td width="33%" align="center">
+
+### 🔄 一鍵生成
+自動整合環景球模板<br>快速生成 GLB 檔案
+
+</td>
+<td width="33%" align="center">
+
+### 👁️ 即時預覽
+上傳後立即預覽<br>圖片效果
+
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+
+### 💾 自動下載
+生成完成自動下載<br>skybox.glb 檔案
+
+</td>
+<td width="33%" align="center">
+
+### ☁️ 雲端 + 本地
+雲端版本（免安裝）<br>本地端版本（離線使用）
+
+</td>
+<td width="33%" align="center">
+
+### 🎨 精美介面
+啟動畫面 + 漸層紫藍配色<br>流暢動畫
+
+</td>
+</tr>
+</table>
 
 ## 🎯 適用場景
 
-- ✅ VR 虛擬展覽空間背景
-- ✅ 元宇宙平台環境設計
-- ✅ 3D 遊戲天空盒
-- ✅ 建築可視化環境
-- ✅ 360° 全景照片展示
-- ✅ AI 生成場景快速預覽
+<div align="center">
+
+| 🏛️ VR 虛擬展覽 | 🌍 元宇宙平台 | 🎮 3D 遊戲天空盒 |
+|:---:|:---:|:---:|
+| **虛擬展覽空間背景** | **元宇宙環境設計** | **遊戲場景天空盒** |
+
+| 🏗️ 建築可視化 | 📸 360° 全景展示 | 🤖 AI 生成場景 |
+|:---:|:---:|:---:|
+| **建築可視化環境** | **全景照片展示** | **AI 場景快速預覽** |
+
+</div>
 
 ## 💻 系統需求
 
-### 雲端版本
-- **瀏覽器**：Chrome、Edge、Firefox、Safari（建議使用 Chrome）
-- **網路連線**：需要網際網路連線
+<table>
+<tr>
+<td width="50%">
 
-### 本地端版本
-- **作業系統**：Windows、macOS、Linux
-- **瀏覽器**：Chrome、Edge、Firefox、Safari（建議使用 Chrome）
-- **Python**：3.x 版本（用於啟動本地伺服器）
+### ☁️ 雲端版本
+
+✅ **瀏覽器**：Chrome / Edge / Firefox / Safari<br>
+✅ **網路連線**：需要網際網路連線<br>
+✅ **裝置**：任何電腦、平板、手機
+
+</td>
+<td width="50%">
+
+### 💾 本地端版本
+
+✅ **作業系統**：Windows / macOS / Linux<br>
+✅ **瀏覽器**：Chrome / Edge / Firefox / Safari<br>
+✅ **Python**：3.x 版本
+
+</td>
+</tr>
+</table>
 
 ## 📥 安裝步驟（本地端版本）
 
@@ -182,14 +259,46 @@ python --version
 
 ## 🎮 支援的 VR 平台
 
-已測試可用的平台：
-- ✅ **Makar XR** - No-code XR 平台，支援 AR/VR/MR 內容創建
-- ✅ **Spatial** - 虛擬空間創建平台
-- ✅ **Mozilla Hubs** - 開源 VR 社交平台
-- ✅ **VRChat** - VR 社交遊戲
-- ✅ **Unity** - 遊戲引擎（需匯入為 Skybox）
-- ✅ **Unreal Engine** - 遊戲引擎
-- ✅ **Blender** - 3D 建模軟體
+<div align="center">
+
+### 已測試可用的平台
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/Makar%20XR-FF6B6B?style=for-the-badge&logo=vr&logoColor=white" alt="Makar XR"><br>
+<sub><b>No-code XR 平台</b><br>支援 AR/VR/MR 內容創建</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/Spatial-4ECDC4?style=for-the-badge&logo=vr&logoColor=white" alt="Spatial"><br>
+<sub><b>虛擬空間創建平台</b></sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/Mozilla%20Hubs-FF7139?style=for-the-badge&logo=mozilla&logoColor=white" alt="Mozilla Hubs"><br>
+<sub><b>開源 VR 社交平台</b></sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.shields.io/badge/VRChat-16161D?style=for-the-badge&logo=vrchat&logoColor=white" alt="VRChat"><br>
+<sub><b>VR 社交遊戲</b></sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="33%">
+<img src="https://img.shields.io/badge/Unity-000000?style=for-the-badge&logo=unity&logoColor=white" alt="Unity"><br>
+<sub><b>遊戲引擎</b><br>（需匯入為 Skybox）</sub>
+</td>
+<td align="center" width="33%">
+<img src="https://img.shields.io/badge/Unreal%20Engine-0E1128?style=for-the-badge&logo=unrealengine&logoColor=white" alt="Unreal Engine"><br>
+<sub><b>遊戲引擎</b></sub>
+</td>
+<td align="center" width="33%">
+<img src="https://img.shields.io/badge/Blender-F5792A?style=for-the-badge&logo=blender&logoColor=white" alt="Blender"><br>
+<sub><b>3D 建模軟體</b></sub>
+</td>
+</tr>
+</table>
+
+</div>
 
 ## 📂 專案結構
 
@@ -266,29 +375,50 @@ A:
 
 ## 👨‍🏫 關於作者
 
+<div align="center">
+
 ### 曾慶良 主任（阿亮老師）
 
-![作者資訊](作者資訊.png)
+<img src="作者資訊.png" width="600" alt="作者資訊">
 
-**現任職務：**
-- 📌 新興科技推廣中心主任
-- 📌 教育部學科中心所長教師
-- 📌 臺北市語文學習領域輔導員
+<br>
 
-**獲獎紀錄：**
-- 🏆 2024年 獲教育部人工智慧講師認證
-- 🏆 2022、2023年 指導學生XR專題競賽獲特優
-- 🏆 2022年 獲VR教材開發教師組特優
-- 🏆 2019年 獲百大資訊人才獎
-- 🏆 2018、2019年 蟬聯天下創新100教師
-- 🏆 2018年 臺北市特殊優良教師
-- 🏆 2017年 教育部行動學習優等
+<table>
+<tr>
+<td width="50%">
+
+**📌 現任職務**
+
+🎓 新興科技推廣中心主任<br>
+🎓 教育部學科中心所長教師<br>
+🎓 臺北市語文學習領域輔導員
+
+</td>
+<td width="50%">
+
+**🏆 獲獎紀錄**
+
+🥇 2024年 教育部人工智慧講師認證<br>
+🥇 2022、2023年 指導學生XR專題競賽特優<br>
+🥇 2022年 VR教材開發教師組特優<br>
+🥇 2019年 百大資訊人才獎<br>
+🥇 2018、2019年 天下創新100教師<br>
+🥇 2018年 臺北市特殊優良教師<br>
+🥇 2017年 教育部行動學習優等
+
+</td>
+</tr>
+</table>
+
+<br>
 
 ### 📞 聯絡方式
 
-- **YouTube 頻道**：[@Liang-yt02](https://www.youtube.com/@Liang-yt02)
-- **3A科技研究社**：[Facebook 社團](https://www.facebook.com/groups/2754139931432955)
-- **課程、研習邀約**：3a01chatgpt@gmail.com
+[![YouTube](https://img.shields.io/badge/YouTube-@Liang--yt02-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/@Liang-yt02)
+[![Facebook](https://img.shields.io/badge/Facebook-3A科技研究社-blue?style=for-the-badge&logo=facebook)](https://www.facebook.com/groups/2754139931432955)
+[![Email](https://img.shields.io/badge/Email-3a01chatgpt@gmail.com-green?style=for-the-badge&logo=gmail)](mailto:3a01chatgpt@gmail.com)
+
+</div>
 
 ## 📜 授權聲明
 
@@ -322,10 +452,24 @@ A:
 
 <div align="center">
 
-**如果這個工具對您有幫助，歡迎給個 ⭐ Star！**
+## 🌟 喜歡這個專案嗎？
 
-Made with ❤️ by 阿亮老師
+如果這個工具對您有幫助，請給我們一個 ⭐ Star！
 
-[回到頂部](#-亮言3d環景球生成器)
+<br>
+
+**Made with ❤️ by 阿亮老師**
+
+<br>
+
+[![立即使用](https://img.shields.io/badge/🚀-立即使用雲端版本-success?style=for-the-badge)](https://chatgpt3a01.github.io/3d-skybox-generator/)
+
+<br>
+
+[⬆️ 回到頂部](#-亮言3d環景球生成器)
+
+---
+
+© 2026 阿亮老師 版權所有
 
 </div>
