@@ -1,8 +1,29 @@
 # 🌐 亮言~3D環景球生成器
 
-一個簡單易用的本地端工具，讓您輕鬆將 360° 全景圖轉換成 VR 環境支援的 GLB 格式環景球。
+一個簡單易用的工具，讓您輕鬆將 360° 全景圖轉換成 VR 環境支援的 GLB 格式環景球。
 
 ![專案 Logo](logo.png)
+
+---
+
+## 🚀 快速開始
+
+### 雲端版本（推薦）⭐
+
+**無需安裝，點擊即用！**
+
+👉 **[立即使用雲端版本](https://chatgpt3a01.github.io/3d-skybox-generator/)**
+
+- ✅ 無需安裝 Python
+- ✅ 無需下載檔案
+- ✅ 任何裝置都能使用
+- ✅ 開啟網頁即可使用
+
+### 本地端版本
+
+如果您偏好本地端執行，或需要離線使用，請參考下方的[安裝步驟](#-安裝步驟)。
+
+---
 
 ## ✨ 功能特點
 
@@ -10,7 +31,7 @@
 - 🔄 **一鍵生成** - 自動整合環景球模板，快速生成 GLB 檔案
 - 👁️ **即時預覽** - 上傳後立即預覽圖片效果
 - 💾 **自動下載** - 生成完成自動下載 skybox.glb 檔案
-- 🚀 **本地執行** - 完全在本地端運行，保護您的隱私
+- ☁️ **雲端 + 本地** - 提供雲端版本（免安裝）和本地端版本（離線使用）
 - 🎨 **精美介面** - 啟動畫面 + 漸層紫藍配色 + 流暢動畫
 
 ## 🎯 適用場景
@@ -24,17 +45,24 @@
 
 ## 💻 系統需求
 
+### 雲端版本
+- **瀏覽器**：Chrome、Edge、Firefox、Safari（建議使用 Chrome）
+- **網路連線**：需要網際網路連線
+
+### 本地端版本
 - **作業系統**：Windows、macOS、Linux
 - **瀏覽器**：Chrome、Edge、Firefox、Safari（建議使用 Chrome）
 - **Python**：3.x 版本（用於啟動本地伺服器）
 
-## 📥 安裝步驟
+## 📥 安裝步驟（本地端版本）
+
+> 💡 **提示**：如果您想直接使用，請訪問[雲端版本](https://chatgpt3a01.github.io/3d-skybox-generator/)，無需安裝！
 
 ### 1. 下載專案
 
 **方法 A：使用 Git Clone（推薦）**
 ```bash
-git clone https://github.com/YOUR_USERNAME/3d-skybox-generator.git
+git clone https://github.com/ChatGPT3a01/3d-skybox-generator.git
 cd 3d-skybox-generator
 ```
 
@@ -58,7 +86,19 @@ python --version
 
 ## 🚀 使用方法
 
-### 方法 1：一鍵啟動（Windows 推薦 ⭐）
+### 雲端版本（最簡單 ⭐）
+
+直接訪問：**[https://chatgpt3a01.github.io/3d-skybox-generator/](https://chatgpt3a01.github.io/3d-skybox-generator/)**
+
+開啟網頁後即可直接使用，無需任何設定！
+
+---
+
+### 本地端版本
+
+如果您已下載專案到本地，請使用以下方法啟動：
+
+#### 方法 1：一鍵啟動（Windows 推薦）
 
 1. **雙擊執行 `啟動伺服器.bat` 檔案**
 2. **會自動開啟命令視窗並顯示：**
@@ -79,7 +119,7 @@ python --version
 3. **複製網址到瀏覽器開啟**
 4. **開始使用！**
 
-### 方法 2：手動啟動（全平台適用）
+#### 方法 2：手動啟動（全平台適用）
 
 1. **開啟終端機（Terminal）或命令提示字元（CMD）**
 2. **切換到專案目錄**
