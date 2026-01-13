@@ -143,6 +143,7 @@ python --version
 ## 🎮 支援的 VR 平台
 
 已測試可用的平台：
+- ✅ **Makar XR** - No-code XR 平台，支援 AR/VR/MR 內容創建
 - ✅ **Spatial** - 虛擬空間創建平台
 - ✅ **Mozilla Hubs** - 開源 VR 社交平台
 - ✅ **VRChat** - VR 社交遊戲
