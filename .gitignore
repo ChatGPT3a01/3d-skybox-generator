@@ -1,0 +1,30 @@
+# Claude AI 工作目錄
+.claude/
+
+# 開發過程檔案
+prompt.txt
+
+# 系統檔案
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 編輯器檔案
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 備份檔案
+*.bak
+*.backup
+
+# 暫存檔案
+*.tmp
+*.temp
+
+# Python 快取
+__pycache__/
+*.py[cod]
+*$py.class

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>亮言~3D環景球生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        /* 啟動畫面 */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0e27;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-out 3.5s forwards;
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        .splash-logo {
+            width: 90%;
+            max-width: 1200px;
+            height: auto;
+            margin-bottom: 60px;
+            animation: logoGlow 2s ease-in-out infinite;
+        }
+        @keyframes logoGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.6));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(100, 200, 255, 0.9));
+            }
+        }
+        .progress-container {
+            width: 80%;
+            max-width: 600px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #7b2ff7, #f107a3);
+            border-radius: 10px;
+            animation: progressLoad 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+        }
+        @keyframes progressLoad {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        .loading-text {
+            color: #00d4ff;
+            font-size: 18px;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        /* 主內容初始隱藏 */
+        #main-content {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-in 4s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .workflow {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .workflow h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .workflow-steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .workflow-step {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .workflow-step-num {
+            background: white;
+            color: #667eea;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 10px;
+        }
+        .workflow-step-text {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .sample-status {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        .sample-status h3 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .file-status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .file-status-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .file-status-card.loaded {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+        .file-status-card.error {
+            border-color: #f44336;
+            background: #fef1f0;
+        }
+        .file-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .file-name {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+        .file-status-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .file-status-card.loaded .file-status-text {
+            color: #4caf50;
+        }
+        .file-status-card.error .file-status-text {
+            color: #f44336;
+        }
+        .upload-section {
+            margin-bottom: 25px;
+        }
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        .upload-area:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+        }
+        .upload-area.dragover {
+            background: #e8ebff;
+            border-color: #764ba2;
+        }
+        #fileInput {
+            display: none;
+        }
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .upload-text {
+            color: #667eea;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .upload-hint {
+            color: #999;
+            font-size: 13px;
+        }
+        .preview-section {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .preview-section h3 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .preview-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .image-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .image-info-item {
+            font-size: 13px;
+            color: #666;
+        }
+        .image-info-item strong {
+            color: #333;
+        }
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #666;
+            font-size: 14px;
+            padding: 12px;
+        }
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+        .status {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        .status.processing {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+        .instructions {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 4px solid #667eea;
+        }
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .instructions ol {
+            margin-left: 20px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .instructions ol li {
+            margin-bottom: 8px;
+        }
+        /* 作者資訊區 */
+        .author-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            color: white;
+        }
+        .author-content {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .author-image {
+            width: 200px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .author-info h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .author-info p {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 8px;
+            opacity: 0.95;
+        }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .social-link {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        /* 授權聲明 */
+        .license-section {
+            background: #fff9e6;
+            border: 2px solid #ffd700;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .license-section h4 {
+            color: #b8860b;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .license-section p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+        .license-section .copyright {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .license-section .warning {
+            color: #d32f2f;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .license-section ul {
+            margin-left: 20px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        @media (max-width: 768px) {
+            .author-content {
+                flex-direction: column;
+            }
+            .author-image {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 啟動畫面 -->
+    <div id="splash-screen">
+        <img src="logo.png" alt="亮言~3D環景球生成器" class="splash-logo">
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="loading-text">系統載入中...</div>
+    </div>
+
+    <!-- 主要內容 -->
+    <div id="main-content">
+    <div class="container">
+        <h1>🌐 亮言~3D環景球生成器</h1>
+        <p class="subtitle">上傳 360° 全景圖，一鍵生成 VR 環景球 GLB 檔案</p>
+
+        <div class="workflow">
+            <h3>⚡ 簡單三步驟</h3>
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="workflow-step-num">1</div>
+                    <div class="workflow-step-text">上傳您的 <strong>360° 全景圖</strong></div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-step-num">2</div>
+                    <div class="workflow-step-text">確認<strong>預覽</strong>正確</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-step-num">3</div>
+                    <div class="workflow-step-text">點擊<strong>生成 GLB</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sample-status">
+            <h3>📦 環景球模板狀態</h3>
+            <div class="file-status-grid">
+                <div class="file-status-card" id="gltfStatus">
+                    <div class="file-icon">📄</div>
+                    <div class="file-name">Spatial Skybox Sample.gltf</div>
+                    <div class="file-status-text">檢查中...</div>
+                </div>
+                <div class="file-status-card" id="binStatus">
+                    <div class="file-icon">💾</div>
+                    <div class="file-name">Spatial Skybox Sample.bin</div>
+                    <div class="file-status-text">檢查中...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">上傳您的 360° 全景圖</div>
+                <div class="upload-hint">點擊或拖曳上傳 JPG、PNG 圖片</div>
+                <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png">
+            </div>
+        </div>
+
+        <div class="preview-section" id="previewSection">
+            <h3>🖼️ 圖片預覽</h3>
+            <img id="previewImage" class="preview-image" alt="預覽圖">
+            <div class="image-info">
+                <div class="image-info-item">
+                    <strong>檔名：</strong><span id="imageName"></span>
+                </div>
+                <div class="image-info-item">
+                    <strong>大小：</strong><span id="imageSize"></span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="convertBtn">
+                <span style="font-size: 24px;">🚀</span>
+                <span>生成 GLB 檔案</span>
+            </button>
+
+            <button class="btn btn-secondary" id="changeImageBtn">
+                更換圖片
+            </button>
+        </div>
+
+        <div class="status" id="status" style="display: none;"></div>
+
+        <div class="instructions">
+            <h3>📖 使用說明</h3>
+            <ol>
+                <li><strong>啟動本地伺服器</strong>
+                    <ul style="margin-top: 8px;">
+                        <li>🌟 <strong>推薦</strong>：雙擊執行 <code>啟動伺服器.bat</code>（會自動顯示網址提示）</li>
+                        <li>或手動執行：<code>python -m http.server 9527</code>，然後在瀏覽器開啟 <code>http://localhost:9527/index.html</code></li>
+                    </ul>
+                </li>
+                <li>上傳您的 360° 全景圖（等距圓柱投影格式，建議 2:1 比例）</li>
+                <li>預覽確認後，點擊「生成 GLB 檔案」</li>
+                <li>系統會自動下載 <strong>skybox.glb</strong>，可直接上傳到 VR 編輯器使用</li>
+            </ol>
+        </div>
+
+        <!-- 作者資訊 -->
+        <div class="author-section">
+            <div class="author-content">
+                <img src="作者資訊.png" alt="曾慶良 主任" class="author-image">
+                <div class="author-info">
+                    <h3>👨‍🏫 關於作者 - 曾慶良 主任（阿亮老師）</h3>
+                    <p>📌 新興科技推廣中心主任</p>
+                    <p>📌 教育部學科中心所長教師</p>
+                    <p>📌 臺北市語文學習領域輔導員</p>
+                    <p>🏆 2024年 獲教育部人工智慧講師認證</p>
+                    <p>🏆 2022、2023年 指導學生XR專題競賽獲特優</p>
+                    <p>🏆 2022年 獲VR教材開發教師組特優</p>
+                    <p>🏆 2019年 獲百大資訊人才獎</p>
+                    <p>🏆 2018、2019蟬聯天下創新100教師</p>
+
+                    <div class="social-links">
+                        <a href="https://www.youtube.com/@Liang-yt02" target="_blank" class="social-link">
+                            📺 YouTube 頻道
+                        </a>
+                        <a href="https://www.facebook.com/groups/2754139931432955?locale=zh_TW" target="_blank" class="social-link">
+                            👥 3A科技研究社
+                        </a>
+                        <a href="mailto:3a01chatgpt@gmail.com" class="social-link">
+                            📧 課程邀約
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 授權聲明 -->
+            <div class="license-section">
+                <h4>📜 授權聲明</h4>
+                <p class="copyright">© 2026 阿亮老師 版權所有</p>
+                <p>本專案僅供「阿亮老師課程學員」學習使用。</p>
+                <p class="warning">⚠️ 禁止事項：</p>
+                <ul>
+                    <li>禁止修改本專案內容</li>
+                    <li>禁止轉傳或散布</li>
+                    <li>禁止商業使用</li>
+                    <li>禁止未經授權之任何形式使用</li>
+                </ul>
+                <p style="margin-top: 10px; font-size: 13px;">如有任何授權需求，請聯繫作者。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 使用 ES6 模組方式載入 Three.js -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        // 導入 Three.js 和相關模組
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewSection = document.getElementById('previewSection');
+        const previewImage = document.getElementById('previewImage');
+        const imageName = document.getElementById('imageName');
+        const imageSize = document.getElementById('imageSize');
+        const convertBtn = document.getElementById('convertBtn');
+        const changeImageBtn = document.getElementById('changeImageBtn');
+        const status = document.getElementById('status');
+        const gltfStatus = document.getElementById('gltfStatus');
+        const binStatus = document.getElementById('binStatus');
+
+        // 檔案路徑
+        const FILES = {
+            gltf: 'Spatial Skybox Sample.gltf',
+            bin: 'Spatial Skybox Sample.bin'
+        };
+
+        let sampleFilesReady = false;
+        let uploadedImageFile = null;
+        let uploadedImageDataURL = null;
+
+        // 啟動畫面結束後再檢查 Sample 檔案
+        setTimeout(() => {
+            checkSampleFiles();
+        }, 4000);
+
+        // 檢查 Sample 檔案
+        async function checkSampleFiles() {
+            const checks = [
+                checkFile(FILES.gltf, gltfStatus),
+                checkFile(FILES.bin, binStatus)
+            ];
+
+            const results = await Promise.all(checks);
+            sampleFilesReady = results.every(r => r);
+
+            if (sampleFilesReady) {
+                showStatus('success', '✅ 環景球模板載入成功！請上傳您的 360° 全景圖。');
+            } else {
+                showStatus('error', '❌ 模板檔案載入失敗，請確認 Sample 檔案是否存在於同一目錄。');
+            }
+        }
+
+        // 檢查單一檔案
+        async function checkFile(filename, statusElement) {
+            try {
+                const response = await fetch(filename + '?t=' + Date.now());
+                if (response.ok) {
+                    statusElement.classList.add('loaded');
+                    statusElement.querySelector('.file-status-text').textContent = '✓ 已載入';
+                    return true;
+                } else {
+                    throw new Error('檔案不存在');
+                }
+            } catch (error) {
+                statusElement.classList.add('error');
+                statusElement.querySelector('.file-status-text').textContent = '✗ 載入失敗';
+                return false;
+            }
+        }
+
+        // 上傳區域事件
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImageUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+
+        // 更換圖片
+        changeImageBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // 處理圖片上傳
+        function handleImageUpload(file) {
+            if (!file.type.match('image/(jpeg|jpg|png)')) {
+                showStatus('error', '❌ 請選擇 JPG 或 PNG 格式的圖片！');
+                return;
+            }
+
+            if (!sampleFilesReady) {
+                showStatus('error', '❌ 模板檔案尚未載入，請稍候再試。');
+                return;
+            }
+
+            uploadedImageFile = file;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                uploadedImageDataURL = e.target.result;
+                previewImage.src = uploadedImageDataURL;
+                imageName.textContent = file.name;
+                imageSize.textContent = formatFileSize(file.size);
+
+                uploadArea.style.display = 'none';
+                previewSection.style.display = 'block';
+                showStatus('success', '✅ 圖片上傳成功！可以開始生成 GLB 了。');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 格式化檔案大小
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        // 生成 GLB
+        convertBtn.addEventListener('click', generateGLB);
+
+        async function generateGLB() {
+            if (!sampleFilesReady) {
+                showStatus('error', '❌ 模板檔案尚未準備好。');
+                return;
+            }
+
+            if (!uploadedImageDataURL) {
+                showStatus('error', '❌ 請先上傳圖片！');
+                return;
+            }
+
+            showStatus('processing', '🔄 正在生成 GLB，請稍候...');
+            convertBtn.disabled = true;
+
+            try {
+                // 讀取 glTF 檔案
+                const gltfResponse = await fetch(FILES.gltf + '?t=' + Date.now());
+                const gltfText = await gltfResponse.text();
+                const gltfJson = JSON.parse(gltfText);
+
+                // 讀取 .bin 檔案
+                const binResponse = await fetch(FILES.bin + '?t=' + Date.now());
+                const binArrayBuffer = await binResponse.arrayBuffer();
+
+                // 建立 Blob URLs
+                const binBlob = new Blob([binArrayBuffer], { type: 'application/octet-stream' });
+                const binURL = URL.createObjectURL(binBlob);
+
+                // 修改 glTF JSON，替換貼圖為用戶上傳的圖片
+                if (gltfJson.buffers && gltfJson.buffers[0]) {
+                    gltfJson.buffers[0].uri = binURL;
+                }
+
+                if (gltfJson.images && gltfJson.images[0]) {
+                    gltfJson.images[0].uri = uploadedImageDataURL;
+                }
+
+                // 建立 glTF Blob
+                const gltfBlob = new Blob([JSON.stringify(gltfJson)], { type: 'application/json' });
+                const gltfURL = URL.createObjectURL(gltfBlob);
+
+                // 使用 GLTFLoader 載入
+                const loader = new GLTFLoader();
+
+                loader.load(
+                    gltfURL,
+                    function(gltf) {
+                        // 載入成功，開始導出為 GLB
+                        const exporter = new GLTFExporter();
+
+                        exporter.parse(
+                            gltf.scene,
+                            function(glbArrayBuffer) {
+                                // 下載 GLB 檔案
+                                const glbBlob = new Blob([glbArrayBuffer], { type: 'application/octet-stream' });
+                                downloadFile(glbBlob, 'skybox.glb');
+
+                                showStatus('success', '🎉 生成完成！skybox.glb 已下載，可以上傳到 VR 編輯器了！');
+                                convertBtn.disabled = false;
+
+                                // 清理 Blob URLs
+                                URL.revokeObjectURL(gltfURL);
+                                URL.revokeObjectURL(binURL);
+                            },
+                            function(error) {
+                                console.error('導出 GLB 時發生錯誤:', error);
+                                showStatus('error', '❌ 導出失敗：' + error.message);
+                                convertBtn.disabled = false;
+                            },
+                            {
+                                binary: true,
+                                embedImages: true
+                            }
+                        );
+                    },
+                    function(progress) {
+                        if (progress.total > 0) {
+                            const percent = (progress.loaded / progress.total) * 100;
+                            showStatus('processing', `🔄 載入中... ${Math.round(percent)}%`);
+                        }
+                    },
+                    function(error) {
+                        console.error('載入 glTF 時發生錯誤:', error);
+                        showStatus('error', '❌ 載入失敗：' + error.message);
+                        convertBtn.disabled = false;
+                    }
+                );
+
+            } catch (error) {
+                console.error('生成過程發生錯誤:', error);
+                showStatus('error', '❌ 生成失敗：' + error.message);
+                convertBtn.disabled = false;
+            }
+        }
+
+        // 下載檔案
+        function downloadFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // 顯示狀態訊息
+        function showStatus(type, message) {
+            status.className = 'status ' + type;
+            status.textContent = message;
+            status.style.display = 'block';
+        }
+
+        // 啟動畫面自動移除
+        setTimeout(() => {
+            const splashScreen = document.getElementById('splash-screen');
+            if (splashScreen) {
+                splashScreen.remove();
+            }
+        }, 4500);
+    </script>
+    </div> <!-- 關閉 main-content -->
+</body>
+</html>
