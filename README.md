@@ -162,6 +162,8 @@ python --version
 ├── Spatial Skybox Sample.bin       # 幾何數據
 ├── texture.jpg                     # 範例全景圖
 ├── 操作步驟.md                     # 詳細操作說明
+├── GitHub上架指南.md               # GitHub 上架教學
+├── 上傳到GitHub.bat                # GitHub 上傳輔助工具（開發者用）
 ├── README.md                       # 本文件
 └── .gitignore                      # Git 忽略檔案配置
 ```
