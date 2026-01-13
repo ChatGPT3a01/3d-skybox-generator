@@ -211,8 +211,6 @@ python --version
 
 #### 方法 2：手動啟動（全平台適用）
 
-**選項 A：使用友善啟動腳本（推薦）**
-
 1. **開啟終端機（Terminal）或命令提示字元（CMD）**
 2. **切換到專案目錄**
    ```bash
@@ -224,24 +222,6 @@ python --version
    ```
 4. **按照畫面指示在瀏覽器開啟網址**
 
-**選項 B：使用原生 Python 伺服器**
-
-1. **開啟終端機（Terminal）或命令提示字元（CMD）**
-2. **切換到專案目錄**
-   ```bash
-   cd /path/to/3d-skybox-generator
-   ```
-3. **啟動伺服器**
-   ```bash
-   python -m http.server 9527
-   ```
-4. **手動在瀏覽器開啟**
-   ```
-   http://localhost:9527/index.html
-   ```
-
-> 💡 **提示**：選項 A 會顯示清楚的中文說明，適合新手使用
-
 ### 停止伺服器
 
 - 按 `Ctrl + C` 或直接關閉終端機視窗
@@ -252,7 +232,7 @@ python --version
 
 1. **啟動伺服器** 🚀
    - 雙擊 `啟動伺服器.bat`（Windows）
-   - 或手動執行 `python -m http.server 9527`
+   - 或手動執行 `python start_server.py`（全平台）
 
 2. **上傳全景圖** 🖼️
    - 開啟瀏覽器訪問 `http://localhost:9527/index.html`
@@ -365,11 +345,12 @@ A: 由於瀏覽器的 CORS 安全限制，必須透過本地伺服器才能正�
 
 ### Q: 端口 9527 被佔用怎麼辦？
 
-A: 可以改用其他端口，例如：
-```bash
-python -m http.server 7777
-```
-然後訪問 `http://localhost:7777/index.html`
+A: 修改 `start_server.py` 檔案中的端口設定：
+1. 用文字編輯器開啟 `start_server.py`
+2. 找到 `PORT = 9527` 這一行
+3. 改成其他端口，例如：`PORT = 7777`
+4. 儲存檔案後重新執行 `python start_server.py`
+5. 按照畫面指示開啟新的網址
 
 ### Q: 生成的 GLB 檔案很大怎麼辦？
 
